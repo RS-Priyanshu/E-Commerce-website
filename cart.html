@@ -70,12 +70,14 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart - Farmers Market</title>
     <link rel="stylesheet" href="cart.css">
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -85,8 +87,17 @@
                     <li><a href="index.html">Home</a></li>
                     <li><a href="products.html">Products</a></li>
                     <li><a href="cart.html">Cart (<span id="cartCount">0</span>)</a></li>
-                    <li><a href="#" id="loginBtn">Login</a></li>
-                    <li><a href="#" id="registerBtn">Register</a></li>
+                    <li class="user-dropdown" style="display:none;">
+                        <button class="user-btn">
+                            <span class="user-avatar"></span>
+                            <span class="user-name"></span>
+                            <i class="fas fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="#">Profile</a>
+                            <a href="#" id="logoutBtn">Logout</a>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -94,7 +105,7 @@
 
     <main class="container">
         <h2>Your Shopping Cart</h2>
-        
+
         <section id="cartItems">
             <p id="emptyCartMessage">Your cart is empty. <a href="products.html">Browse products</a> to add items.</p>
         </section>
@@ -127,5 +138,6 @@
     <script src="cart.js"></script>
     <script src="auth.js"></script>
     <script src="main.js"></script>
-    </body>
-    </html>
+</body>
+
+</html>

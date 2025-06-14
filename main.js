@@ -270,3 +270,38 @@
 
         // Initialize auth check
         checkAuth();
+
+        // Update UI based on login status
+function checkAuth() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+    const loginBtn = document.getElementById('loginBtn');
+    const registerBtn = document.getElementById('registerBtn');
+    const userDropdown = document.querySelector('.user-dropdown');
+    
+    if (currentUser) {
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (registerBtn) registerBtn.style.display = 'none';
+        if (userDropdown) {
+            userDropdown.style.display = 'block';
+            // Update user name and avatar
+            const userName = document.querySelector('.user-name');
+            const userAvatar = document.querySelector('.user-avatar');
+            if (userName) userName.textContent = currentUser.name.split(' ')[0]; // First name only
+            if (userAvatar) userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
+        }
+    } else {
+        if (loginBtn) loginBtn.style.display = 'block';
+        if (registerBtn) registerBtn.style.display = 'block';
+        if (userDropdown) userDropdown.style.display = 'none';
+    }
+}
+
+// Add this to the existing main.js file
+// Logout functionality
+document.addEventListener('click', function(e) {
+    if (e.target && e.target.id === 'logoutBtn') {
+        e.preventDefault();
+        localStorage.removeItem('currentUser');
+        window.location.href = 'index.html';
+    }
+});

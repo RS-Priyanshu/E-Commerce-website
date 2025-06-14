@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +18,19 @@
                     <li><a href="index.html">Home</a></li>
                     <li><a href="products.html">Products</a></li>
                     <li><a href="cart.html">Cart (<span id="cartCount">0</span>)</a></li>
-                    <li id="addProductNavItem" style="display:none;"><a href="farmer-dashboard.html" class="btn btn-outline">Add Product</a></li>
+                    <li id="addProductNavItem" style="display:none;"><a href="farmer-dashboard.html"
+                            class="btn btn-outline">Add Product</a></li>
+                    <li class="user-dropdown" style="display:none;">
+                        <button class="user-btn">
+                            <span class="user-avatar"></span>
+                            <span class="user-name"></span>
+                            <i class="fas fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="#">Profile</a>
+                            <a href="#" id="logoutBtn">Logout</a>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -77,16 +90,16 @@
     <!-- <script src="products.js"></script> -->
     <script>
         // Check if user is a farmer and show/hide Add Product button
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
             const addProductNavItem = document.getElementById('addProductNavItem');
-            
+
             if (currentUser && currentUser.isFarmer) {
                 addProductNavItem.style.display = 'block';
             } else {
                 addProductNavItem.style.display = 'none';
             }
-            
+
             // Initialize cart count
             updateCartCount();
         });
