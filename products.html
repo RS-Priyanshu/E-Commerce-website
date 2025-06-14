@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Farmers Market</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">Farmers Market</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="cart.html">Cart (<span id="cartCount">0</span>)</a></li>
+                    <li><a href="#" id="loginBtn">Login</a></li>
+                    <li><a href="#" id="registerBtn">Register</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Add Product Form (only for farmers) -->
+        <section id="addProductSection" style="display:none; margin-bottom:2rem;">
+            <h2>Add New Product</h2>
+            <form id="addProductForm" class="product-form">
+                <input type="text" id="productName" placeholder="Product Name" required>
+                <input type="number" id="productPrice" placeholder="Price (₹)" min="1" required>
+                <input type="text" id="productLocation" placeholder="Location (State)" required>
+                <input type="text" id="productUnit" placeholder="Unit (e.g. kg, dozen)" required>
+                <input type="number" id="productQuantity" placeholder="Available Quantity" min="1" required>
+                <input type="number" id="productMinOrder" placeholder="Minimum Order Value" min="1" required>
+                <input type="text" id="productImage" placeholder="Image URL (optional)">
+                <textarea id="productDescription" placeholder="Product Description" required></textarea>
+                <button type="submit" class="btn">Add Product</button>
+            </form>
+        </section>
+
+        <section class="product-filters">
+            <h2>Browse Products</h2>
+            <div class="filter-section">
+                <input type="text" id="searchInput" placeholder="Search products...">
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="vegetables">Vegetables</option>
+                    <option value="fruits">Fruits</option>
+                    <option value="grains">Grains</option>
+                    <option value="dairy">Dairy</option>
+                </select>
+                <select id="locationFilter">
+                    <option value="">All Locations</option>
+                    <!-- Will be populated by JS -->
+                </select>
+                <button id="applyFilters" class="btn">Apply Filters</button>
+            </div>
+        </section>
+        <section id="addProductSection" style="display: none; margin-top: 2rem;" class="fade-in">
+            <h2>Add New Product</h2>
+            <form id="addProductForm" class="product-form">
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Price (₹)</label>
+                    <input type="number" id="productPrice" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="productUnit">Unit (e.g., kg, litre)</label>
+                    <input type="text" id="productUnit" required>
+                </div>
+                <div class="form-group">
+                    <label for="productQuantity">Total Quantity Available</label>
+                    <input type="number" id="productQuantity" required>
+                </div>
+                <div class="form-group">
+                    <label for="productMinOrder">Minimum Order Quantity</label>
+                    <input type="number" id="productMinOrder" required>
+                </div>
+                <div class="form-group">
+                    <label for="productLocation">Location (State/City)</label>
+                    <input type="text" id="productLocation" required>
+                </div>
+                <div class="form-group">
+                    <label for="productImage">Image URL</label>
+                    <input type="text" id="productImage" placeholder="Optional, else default used">
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Description</label>
+                    <textarea id="productDescription" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Product</button>
+            </form>
+        </section>
+
+        <section class="product-list">
+            <div id="productsContainer">
+                <!-- Products will be loaded here by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Farmers Market. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Product Detail Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="productDetail">
+                <!-- Product details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal (same as index.html) -->
+    <div id="authModal" class="modal">
+        <!-- Same content as index.html -->
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="products.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>

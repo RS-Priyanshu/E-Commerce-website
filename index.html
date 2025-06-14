@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmers Market - Buy Fresh Directly from Farmers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="animations.css">
+</head>
+<body>
+    <header class="slide-down">
+        <div class="container">
+            <h1 class="logo">Farmers Market</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="cart.html">Cart (<span id="cartCount">0</span>)</a></li>
+                    <li><a href="#" id="loginBtn">Login</a></li>
+                    <li><a href="#" id="registerBtn">Register</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero fade-in">
+            <div class="hero-content">
+                <h2>Fresh Produce Directly from Farms</h2>
+                <p>Connect with local farmers and buy fresh, organic products at fair prices</p>
+                <div class="hero-buttons">
+                    <a href="products.html" class="btn btn-primary">Browse Products</a>
+                    <a href="#" id="sellBtn" class="btn btn-outline">Sell Your Produce</a>
+                </div>
+            </div>
+            <div class="hero-image"></div>
+        </section>
+
+        <section class="features slide-in-left delay-1">
+            <div class="feature-card">
+                <i class="fas fa-leaf"></i>
+                <h3>Fresh & Organic</h3>
+                <p>Direct from farm to your table with no middlemen</p>
+            </div>
+            <div class="feature-card slide-in-left delay-2">
+                <i class="fas fa-rupee-sign"></i>
+                <h3>Fair Prices</h3>
+                <p>Farmers get better prices, you pay less</p>
+            </div>
+            <div class="feature-card slide-in-left delay-3">
+                <i class="fas fa-truck"></i>
+                <h3>Fast Delivery</h3>
+                <p>Get your order delivered quickly</p>
+            </div>
+        </section>
+
+        <section class="role-selection fade-in">
+            <h2>Join As</h2>
+            <div class="role-cards">
+                <div class="role-card slide-in-left">
+                    <i class="fas fa-shopping-basket"></i>
+                    <h3>Buyer</h3>
+                    <p>Buy fresh products directly from farmers</p>
+                    <button class="btn btn-primary select-role" data-role="buyer">Continue as Buyer</button>
+                </div>
+                <div class="role-card slide-in-right">
+                    <i class="fas fa-tractor"></i>
+                    <h3>Farmer</h3>
+                    <p>Sell your farm products directly to customers</p>
+                    <button class="btn btn-primary select-role" data-role="farmer">Continue as Farmer</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content scale-in">
+            <span class="close">&times;</span>
+            <div class="auth-tabs">
+                <button class="tab-btn active" data-tab="login">Login</button>
+                <button class="tab-btn" data-tab="register">Register</button>
+            </div>
+            
+            <div id="loginForm" class="auth-form">
+                <h3>Login to Your Account</h3>
+                <div class="social-login">
+                    <button class="btn btn-social google" id="googleLogin">
+                        <i class="fab fa-google"></i> Login with Google
+                    </button>
+                    <button class="btn btn-social facebook" id="facebookLogin">
+                        <i class="fab fa-facebook-f"></i> Login with Facebook
+                    </button>
+                </div>
+                <div class="divider">OR</div>
+                <form id="loginForm">
+                    <input type="hidden" id="userRole" value="">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+            </div>
+            
+            <div id="registerForm" class="auth-form" style="display: none;">
+                <h3>Create New Account</h3>
+                <form id="registerForm">
+                    <input type="hidden" id="regRole" value="">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="regName">Full Name</label>
+                            <input type="text" id="regName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail">Email</label>
+                            <input type="email" id="regEmail" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="regPassword">Password</label>
+                            <input type="password" id="regPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regConfirmPassword">Confirm Password</label>
+                            <input type="password" id="regConfirmPassword" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPhone">Phone Number</label>
+                        <input type="tel" id="regPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regAddress">Address</label>
+                        <textarea id="regAddress" rows="3" required></textarea>
+                    </div>
+                    <div id="farmerFields" style="display: none;">
+                        <div class="form-group">
+                            <label for="regFarmName">Farm Name</label>
+                            <input type="text" id="regFarmName">
+                        </div>
+                        <div class="form-group">
+                            <label for="regLocation">Location</label>
+                            <input type="text" id="regLocation">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="slide-up">
+        <div class="container">
+            <p>&copy; 2023 Farmers Market. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    
+    <script src="main.js"></script>
+    <script src="auth.js"></script>
+    <script src="animations.js"></script>
+</body>
+</html>

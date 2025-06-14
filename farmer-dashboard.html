@@ -1,0 +1,243 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmers Market - Buy Fresh Produce Directly from Farmers</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">Farmers Market</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="#" id="loginBtn">Login</a></li>
+                    <li><a href="#" id="registerBtn">Register</a></li>
+                    <li><a href="cart.html">Cart (<span id="cartCount">0</span>)</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2>Fresh Produce Direct from Farmers</h2>
+                <p>Buy rice, wheat, fruits, vegetables and more directly from verified farmers in your area.</p>
+                <a href="products.html" class="btn">Browse Products</a>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <div class="feature">
+                    <h3>Verified Farmers</h3>
+                    <p>All our farmers go through a strict verification process.</p>
+                </div>
+                <div class="feature">
+                    <h3>Fresh Products</h3>
+                    <p>Get farm-fresh products delivered to your doorstep.</p>
+                </div>
+                <div class="feature">
+                    <h3>Fair Prices</h3>
+                    <p>Farmers set their own prices, cutting out the middleman.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Farmers Market. All rights reserved.</p>
+        </div>
+    </footer>
+
+    // Auth Modal 
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="authForms">
+                <div id="loginForm">
+                    <h2>Login</h2>
+                    <form id="loginFormElement">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn">Login</button>
+                    </form>
+                    <p>Don't have an account? <a href="#" id="showRegister">Register</a></p>
+                </div>
+
+                <div id="registerForm" style="display:none;">
+                    <h2>Register</h2>
+                    <form id="registerFormElement">
+                        <div class="form-group">
+                            <label for="regName">Full Name</label>
+                            <input type="text" id="regName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail">Email</label>
+                            <input type="email" id="regEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword">Password</label>
+                            <input type="password" id="regPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regConfirmPassword">Confirm Password</label>
+                            <input type="password" id="regConfirmPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="regIsFarmer"> I'm a farmer
+                            </label>
+                        </div>
+                        <div id="farmerFields" style="display:none;">
+                            <div class="form-group">
+                                <label for="regFarmName">Farm Name</label>
+                                <input type="text" id="regFarmName">
+                            </div>
+                            <div class="form-group">
+                                <label for="regLocation">Location</label>
+                                <input type="text" id="regLocation">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn">Register</button>
+                    </form>
+                    <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="main.js"></script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Dashboard - Farmers Market</title>
+    <link rel="stylesheet" href="farmer-dashboard.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">Farmers Market</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="farmer-dashboard.html" class="active">Dashboard</a></li>
+                    <li><a href="#" id="logoutBtn">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="dashboard-header">
+            <h2>Farmer Dashboard</h2>
+            <p>Manage your products and orders</p>
+        </div>
+        
+        <section class="farmer-info">
+            <div class="section-header">
+                <h3>Your Farm Information</h3>
+                <button id="editFarmInfo" class="btn btn-outline">Edit Information</button>
+            </div>
+            <div id="farmInfo" class="info-card">
+                <!-- Farm info will be loaded here -->
+            </div>
+        </section>
+
+        <section class="products-management">
+            <div class="section-header">
+                <h3>Your Products</h3>
+                <button id="addProductBtn" class="btn btn-primary">Add Product</button>
+            </div>
+            <div id="farmerProducts" class="products-grid">
+                <!-- Farmer's products will be listed here -->
+            </div>
+        </section>
+
+        <section class="orders">
+            <div class="section-header">
+                <h3>Recent Orders</h3>
+            </div>
+            <div id="farmerOrders" class="info-card">
+                <p>No orders yet. Your orders will appear here when customers purchase your products.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="productFormModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="productFormTitle">Add New Product</h3>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productName">Product Name*</label>
+                        <input type="text" id="productName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productCategory">Category*</label>
+                        <select id="productCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="vegetables">Vegetables</option>
+                            <option value="fruits">Fruits</option>
+                            <option value="grains">Grains</option>
+                            <option value="dairy">Dairy</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productPrice">Price (₹)*</label>
+                        <input type="number" id="productPrice" min="1" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productQuantity">Quantity Available*</label>
+                        <input type="number" id="productQuantity" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productUnit">Unit*</label>
+                        <select id="productUnit" required>
+                            <option value="kg">kg</option>
+                            <option value="g">g</option>
+                            <option value="piece">piece</option>
+                            <option value="dozen">dozen</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productDescription">Description</label>
+                    <textarea id="productDescription" rows="4"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline cancel-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </body>
+    </html>
