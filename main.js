@@ -1,190 +1,272 @@
-// DOM Elements
-const loginBtn = document.getElementById('loginBtn');
-const registerBtn = document.getElementById('registerBtn');
-const logoutBtn = document.getElementById('logoutBtn');
-const authModal = document.getElementById('authModal');
-const closeModal = document.querySelector('.modal .close');
-const showRegister = document.getElementById('showRegister');
-const showLogin = document.getElementById('showLogin');
-const roleCards = document.querySelectorAll('.role-card');
-const selectRoleBtns = document.querySelectorAll('.select-role');
-const userRoleInput = document.getElementById('userRole');
-const regRoleInput = document.getElementById('regRole');
-const sellBtn = document.getElementById('sellBtn');
-const tabBtns = document.querySelectorAll('.tab-btn');
-const loginForm = document.getElementById('loginForm');
-const registerForm = document.getElementById('registerForm');
-const isFarmerCheckbox = document.getElementById('regIsFarmer');
-const farmerFields = document.getElementById('farmerFields');
-const googleLoginBtn = document.getElementById('googleLogin');
-const facebookLoginBtn = document.getElementById('facebookLogin');
+ // DOM Elements
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const authModal = document.getElementById('authModal');
+        const closeModal = document.querySelector('.modal .close');
+        const showRegister = document.getElementById('showRegister');
+        const showLogin = document.getElementById('showLogin');
+        const selectRoleBtns = document.querySelectorAll('.select-role');
+        const userRoleInput = document.getElementById('userRole');
+        const regRoleInput = document.getElementById('regRole');
+        const sellBtn = document.getElementById('sellBtn');
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const loginFormElement = document.getElementById('loginFormElement');
+        const registerFormElement = document.getElementById('registerFormElement');
+        const farmerFields = document.getElementById('farmerFields');
+        const googleLoginBtn = document.getElementById('googleLogin');
+        const facebookLoginBtn = document.getElementById('facebookLogin');
 
-// Firebase Configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyD5ZJ4Q6XQ6XQ6XQ6XQ6XQ6XQ6XQ6XQ6XQ",
-    authDomain: "farmers-market-ecommerce.firebaseapp.com",
-    projectId: "farmers-market-ecommerce",
-    storageBucket: "farmers-market-ecommerce.appspot.com",
-    messagingSenderId: "123456789012",
-    appId: "1:123456789012:web:abcdefghijklmnopqrstuv"
-};
-
-// Initialize Firebase
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-// Check authentication state
-function checkAuth() {
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            // User is signed in
-            const currentUser = JSON.parse(localStorage.getItem('currentUser') || {});
-            
-            // Update UI for logged in user
-            if (loginBtn) loginBtn.style.display = 'none';
-            if (registerBtn) registerBtn.style.display = 'none';
-            if (logoutBtn) logoutBtn.style.display = 'block';
-            
-            // Redirect based on role
-            if (currentUser.isFarmer && window.location.pathname.includes('index.html')) {
-                window.location.href = 'farmer-dashboard.html';
-            } else if (!currentUser.isFarmer && window.location.pathname.includes('index.html')) {
-                window.location.href = 'products.html';
-            }
-        } else {
-            // User is signed out
-            if (loginBtn) loginBtn.style.display = 'block';
-            if (registerBtn) registerBtn.style.display = 'block';
-            if (logoutBtn) logoutBtn.style.display = 'none';
-            
-            // Clear current user from localStorage
-            localStorage.removeItem('currentUser');
+        // Users data in localStorage
+        if (!localStorage.getItem('users')) {
+            localStorage.setItem('users', JSON.stringify([]));
         }
-    });
-}
 
-// Select Role Functionality
-selectRoleBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        const role = e.target.getAttribute('data-role');
-        userRoleInput.value = role;
-        regRoleInput.value = role;
-        
-        // Show auth modal with register form
-        authModal.style.display = 'block';
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('registerForm').style.display = 'block';
-        
-        // Show farmer fields if role is farmer
-        farmerFields.style.display = role === 'farmer' ? 'block' : 'none';
-    });
-});
-
-// Sell Button (for farmers)
-if (sellBtn) {
-    sellBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        authModal.style.display = 'block';
-        userRoleInput.value = 'farmer';
-        regRoleInput.value = 'farmer';
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('registerForm').style.display = 'block';
-        farmerFields.style.display = 'block';
-    });
-}
-
-// Tab Switching in Auth Modal
-tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const tab = btn.getAttribute('data-tab');
-        
-        // Update active tab
-        tabBtns.forEach(t => t.classList.remove('active'));
-        btn.classList.add('active');
-        
-        // Show corresponding form
-        if (tab === 'login') {
-            document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('registerForm').style.display = 'none';
-        } else {
-            document.getElementById('registerForm').style.display = 'block';
-            document.getElementById('loginForm').style.display = 'none';
+        // Show Login Modal
+        if (loginBtn) {
+            loginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                authModal.style.display = 'flex';
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('registerForm').style.display = 'none';
+                
+                // Update active tab
+                tabBtns.forEach(t => t.classList.remove('active'));
+                document.querySelector('.tab-btn[data-tab="login"]').classList.add('active');
+            });
         }
-    });
-});
 
-// Show Register Form
-if (showRegister) {
-    showRegister.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('registerForm').style.display = 'block';
-        
-        // Update active tab
-        tabBtns.forEach(t => t.classList.remove('active'));
-        document.querySelector('.tab-btn[data-tab="register"]').classList.add('active');
-    });
-}
+        // Show Register Modal
+        if (registerBtn) {
+            registerBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                authModal.style.display = 'flex';
+                document.getElementById('registerForm').style.display = 'block';
+                document.getElementById('loginForm').style.display = 'none';
+                
+                // Update active tab
+                tabBtns.forEach(t => t.classList.remove('active'));
+                document.querySelector('.tab-btn[data-tab="register"]').classList.add('active');
+            });
+        }
 
-// Show Login Form
-if (showLogin) {
-    showLogin.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.getElementById('registerForm').style.display = 'none';
-        document.getElementById('loginForm').style.display = 'block';
-        
-        // Update active tab
-        tabBtns.forEach(t => t.classList.remove('active'));
-        document.querySelector('.tab-btn[data-tab="login"]').classList.add('active');
-    });
-}
-
-// Close Modal
-if (closeModal) {
-    closeModal.addEventListener('click', () => {
-        authModal.style.display = 'none';
-    });
-}
-
-// Close modal when clicking outside
-window.addEventListener('click', (e) => {
-    if (e.target === authModal) {
-        authModal.style.display = 'none';
-    }
-});
-
-// Logout
-if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-        auth.signOut().then(() => {
-            localStorage.removeItem('currentUser');
-            window.location.href = 'index.html';
+        // Select Role Functionality
+        selectRoleBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const role = e.target.getAttribute('data-role');
+                userRoleInput.value = role;
+                regRoleInput.value = role;
+                
+                // Show auth modal with register form
+                authModal.style.display = 'flex';
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+                
+                // Show farmer fields if role is farmer
+                farmerFields.style.display = role === 'farmer' ? 'block' : 'none';
+                
+                // Update active tab
+                tabBtns.forEach(t => t.classList.remove('active'));
+                document.querySelector('.tab-btn[data-tab="register"]').classList.add('active');
+            });
         });
-    });
-}
 
-// Toggle farmer fields in registration
-if (isFarmerCheckbox) {
-    isFarmerCheckbox.addEventListener('change', function() {
-        farmerFields.style.display = this.checked ? 'block' : 'none';
-    });
-}
+        // Sell Button (for farmers)
+        if (sellBtn) {
+            sellBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                authModal.style.display = 'flex';
+                userRoleInput.value = 'farmer';
+                regRoleInput.value = 'farmer';
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+                farmerFields.style.display = 'block';
+                
+                // Update active tab
+                tabBtns.forEach(t => t.classList.remove('active'));
+                document.querySelector('.tab-btn[data-tab="register"]').classList.add('active');
+            });
+        }
 
-// Initialize cart count
-function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const cartCount = document.getElementById('cartCount');
-    if (cartCount) {
-        cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
-    }
-}
+        // Tab Switching in Auth Modal
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.getAttribute('data-tab');
+                
+                // Update active tab
+                tabBtns.forEach(t => t.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Show corresponding form
+                if (tab === 'login') {
+                    document.getElementById('loginForm').style.display = 'block';
+                    document.getElementById('registerForm').style.display = 'none';
+                } else {
+                    document.getElementById('registerForm').style.display = 'block';
+                    document.getElementById('loginForm').style.display = 'none';
+                }
+            });
+        });
 
-// Initialize page
-document.addEventListener('DOMContentLoaded', () => {
-    checkAuth();
-    updateCartCount();
-});
+        // Show Register Form
+        if (showRegister) {
+            showRegister.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+                
+                // Update active tab
+                tabBtns.forEach(t => t.classList.remove('active'));
+                document.querySelector('.tab-btn[data-tab="register"]').classList.add('active');
+            });
+        }
+
+        // Show Login Form
+        if (showLogin) {
+            showLogin.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('registerForm').style.display = 'none';
+                document.getElementById('loginForm').style.display = 'block';
+                
+                // Update active tab
+                tabBtns.forEach(t => t.classList.remove('active'));
+                document.querySelector('.tab-btn[data-tab="login"]').classList.add('active');
+            });
+        }
+
+        // Close Modal
+        if (closeModal) {
+            closeModal.addEventListener('click', () => {
+                authModal.style.display = 'none';
+            });
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                authModal.style.display = 'none';
+            }
+        });
+
+        // Login Form Handler
+        if (loginFormElement) {
+            loginFormElement.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                const role = document.getElementById('userRole').value;
+                
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                if (user) {
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    alert('Login successful!');
+                    authModal.style.display = 'none';
+                    
+                    // Redirect based on role
+                    if (user.isFarmer) {
+                        window.location.href = 'farmer-dashboard.html';
+                    } else {
+                        window.location.href = 'products.html';
+                    }
+                } else {
+                    alert('Invalid email or password');
+                }
+            });
+        }
+
+        // Register Form Handler
+        if (registerFormElement) {
+            registerFormElement.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const name = document.getElementById('regName').value;
+                const email = document.getElementById('regEmail').value;
+                const password = document.getElementById('regPassword').value;
+                const confirmPassword = document.getElementById('regConfirmPassword').value;
+                const phone = document.getElementById('regPhone').value;
+                const address = document.getElementById('regAddress').value;
+                const role = document.getElementById('regRole').value;
+                const isFarmer = role === 'farmer';
+                
+                // Validate passwords match
+                if (password !== confirmPassword) {
+                    alert('Passwords do not match!');
+                    return;
+                }
+                
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                
+                // Check if email already exists
+                if (users.some(u => u.email === email)) {
+                    alert('Email already registered!');
+                    return;
+                }
+                
+                // Create user object
+                const userData = {
+                    id: 'user_' + Date.now(),
+                    name,
+                    email,
+                    password,
+                    phone,
+                    address,
+                    isFarmer,
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Add farmer-specific fields if farmer
+                if (isFarmer) {
+                    userData.farmName = document.getElementById('regFarmName').value;
+                    userData.location = document.getElementById('regLocation').value;
+                    userData.verified = false; // Farmers need to be verified
+                }
+                
+                // Save user to localStorage
+                users.push(userData);
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+                
+                alert(`Registration successful! ${isFarmer ? 'Your farmer account is pending verification.' : ''}`);
+                authModal.style.display = 'none';
+                
+                // Redirect based on role
+                if (isFarmer) {
+                    window.location.href = 'farmer-dashboard.html';
+                } else {
+                    window.location.href = 'products.html';
+                }
+            });
+        }
+
+        // Social login buttons (demo only)
+        if (googleLoginBtn) {
+            googleLoginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Google login would be implemented here in a real app');
+            });
+        }
+
+        if (facebookLoginBtn) {
+            facebookLoginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Facebook login would be implemented here in a real app');
+            });
+        }
+
+        // Update UI based on login status
+        function checkAuth() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+            
+            if (currentUser) {
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (registerBtn) registerBtn.style.display = 'none';
+            } else {
+                if (loginBtn) loginBtn.style.display = 'block';
+                if (registerBtn) registerBtn.style.display = 'block';
+            }
+        }
+
+        // Initialize auth check
+        checkAuth();

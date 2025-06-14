@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,85 +17,38 @@
                     <li><a href="index.html">Home</a></li>
                     <li><a href="products.html">Products</a></li>
                     <li><a href="cart.html">Cart (<span id="cartCount">0</span>)</a></li>
-                    <li><a href="#" id="loginBtn">Login</a></li>
-                    <li><a href="#" id="registerBtn">Register</a></li>
+                    <li id="addProductNavItem" style="display:none;"><a href="farmer-dashboard.html" class="btn btn-outline">Add Product</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <main class="container">
-        <!-- Add Product Form (only for farmers) -->
-        <section id="addProductSection" style="display:none; margin-bottom:2rem;">
-            <h2>Add New Product</h2>
-            <form id="addProductForm" class="product-form">
-                <input type="text" id="productName" placeholder="Product Name" required>
-                <input type="number" id="productPrice" placeholder="Price (₹)" min="1" required>
-                <input type="text" id="productLocation" placeholder="Location (State)" required>
-                <input type="text" id="productUnit" placeholder="Unit (e.g. kg, dozen)" required>
-                <input type="number" id="productQuantity" placeholder="Available Quantity" min="1" required>
-                <input type="number" id="productMinOrder" placeholder="Minimum Order Value" min="1" required>
-                <input type="text" id="productImage" placeholder="Image URL (optional)">
-                <textarea id="productDescription" placeholder="Product Description" required></textarea>
-                <button type="submit" class="btn">Add Product</button>
-            </form>
-        </section>
-
         <section class="product-filters">
-            <h2>Browse Products</h2>
-            <div class="filter-section">
-                <input type="text" id="searchInput" placeholder="Search products...">
-                <select id="categoryFilter">
-                    <option value="">All Categories</option>
-                    <option value="vegetables">Vegetables</option>
-                    <option value="fruits">Fruits</option>
-                    <option value="grains">Grains</option>
-                    <option value="dairy">Dairy</option>
-                </select>
-                <select id="locationFilter">
-                    <option value="">All Locations</option>
-                    <!-- Will be populated by JS -->
-                </select>
-                <button id="applyFilters" class="btn">Apply Filters</button>
+            <div class="filter-header">
+                <h2>Browse Products</h2>
             </div>
-        </section>
-        <section id="addProductSection" style="display: none; margin-top: 2rem;" class="fade-in">
-            <h2>Add New Product</h2>
-            <form id="addProductForm" class="product-form">
-                <div class="form-group">
-                    <label for="productName">Product Name</label>
-                    <input type="text" id="productName" required>
+            <div class="filter-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search products...">
                 </div>
-                <div class="form-group">
-                    <label for="productPrice">Price (₹)</label>
-                    <input type="number" id="productPrice" step="0.01" required>
+                <div class="filter-group">
+                    <select id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="vegetables">Vegetables</option>
+                        <option value="fruits">Fruits</option>
+                        <option value="grains">Grains</option>
+                        <option value="dairy">Dairy</option>
+                    </select>
                 </div>
-                <div class="form-group">
-                    <label for="productUnit">Unit (e.g., kg, litre)</label>
-                    <input type="text" id="productUnit" required>
+                <div class="filter-group">
+                    <select id="locationFilter">
+                        <option value="">All Locations</option>
+                    </select>
                 </div>
-                <div class="form-group">
-                    <label for="productQuantity">Total Quantity Available</label>
-                    <input type="number" id="productQuantity" required>
-                </div>
-                <div class="form-group">
-                    <label for="productMinOrder">Minimum Order Quantity</label>
-                    <input type="number" id="productMinOrder" required>
-                </div>
-                <div class="form-group">
-                    <label for="productLocation">Location (State/City)</label>
-                    <input type="text" id="productLocation" required>
-                </div>
-                <div class="form-group">
-                    <label for="productImage">Image URL</label>
-                    <input type="text" id="productImage" placeholder="Optional, else default used">
-                </div>
-                <div class="form-group">
-                    <label for="productDescription">Description</label>
-                    <textarea id="productDescription" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Add Product</button>
-            </form>
+                <button id="applyFilters" class="btn btn-primary">Apply Filters</button>
+            </div>
         </section>
 
         <section class="product-list">
@@ -122,10 +74,32 @@
         </div>
     </div>
 
-    <!-- Auth Modal (same as index.html) -->
-    <div id="authModal" class="modal">
-        <!-- Same content as index.html -->
-    </div>
+    <!-- <script src="products.js"></script> -->
+    <script>
+        // Check if user is a farmer and show/hide Add Product button
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            const addProductNavItem = document.getElementById('addProductNavItem');
+            
+            if (currentUser && currentUser.isFarmer) {
+                addProductNavItem.style.display = 'block';
+            } else {
+                addProductNavItem.style.display = 'none';
+            }
+            
+            // Initialize cart count
+            updateCartCount();
+        });
+
+        // Update cart count function
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartCount = document.getElementById('cartCount');
+            if (cartCount) {
+                cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
+            }
+        }
+    </script>
 
     <script src="auth.js"></script>
     <script src="products.js"></script>

@@ -1,76 +1,19 @@
+// DOM Elements
 const productsContainer = document.getElementById('productsContainer');
 const searchInput = document.getElementById('searchInput');
 const categoryFilter = document.getElementById('categoryFilter');
 const locationFilter = document.getElementById('locationFilter');
 const applyFilters = document.getElementById('applyFilters');
-const addProductSection = document.getElementById('addProductSection');
-const addProductForm = document.getElementById('addProductForm');
-
-// Get current user
-const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-
-// Only show add product form if user is a farmer
-if (currentUser && currentUser.isFarmer) {
-    addProductSection.style.display = 'block';
-} else {
-    addProductSection.style.display = 'none';
-}
 
 // Load products from localStorage
-let products = JSON.parse(localStorage.getItem('products')) || [];
-
-// Add Product Handler
-if (addProductForm) {
-    addProductForm.onsubmit = function (e) {
-        e.preventDefault();
-        // Get form values
-        const name = document.getElementById('productName').value.trim();
-        const price = parseFloat(document.getElementById('productPrice').value);
-        const location = document.getElementById('productLocation').value.trim();
-        const unit = document.getElementById('productUnit').value.trim();
-        const quantity = parseInt(document.getElementById('productQuantity').value);
-        const minOrder = parseInt(document.getElementById('productMinOrder').value);
-        const image = document.getElementById('productImage').value.trim() || 'https://via.placeholder.com/300x200?text=Product';
-        const description = document.getElementById('productDescription').value.trim();
-        const category = categoryFromName(name);
-
-        // Create product object
-        const product = {
-            id: Date.now().toString(),
-            name,
-            category,
-            price,
-            unit,
-            quantity,
-            minOrder,
-            description,
-            farmerId: currentUser.id,
-            farmerName: currentUser.farmName || currentUser.name,
-            location,
-            image
-        };
-
-        products.push(product);
-        localStorage.setItem('products', JSON.stringify(products));
-        addProductForm.reset();
-        alert('Product added successfully!');
-        displayProducts(products);
-        initLocationFilter();
-    };
-}
-
-// Guess category from product name (simple logic)
-function categoryFromName(name) {
-    const n = name.toLowerCase();
-    if (n.includes('wheat') || n.includes('rice') || n.includes('flour')) return 'grains';
-    if (n.includes('milk') || n.includes('cheese') || n.includes('curd')) return 'dairy';
-    if (n.includes('apple') || n.includes('mango') || n.includes('banana') || n.includes('fruit')) return 'fruits';
-    if (n.includes('carrot') || n.includes('potato') || n.includes('onion') || n.includes('vegetable')) return 'vegetables';
-    return '';
+function loadProducts() {
+    const products = JSON.parse(localStorage.getItem('products')) || [];
+    displayProducts(products);
+    initLocationFilter(products);
 }
 
 // Initialize location filter
-function initLocationFilter() {
+function initLocationFilter(products) {
     locationFilter.innerHTML = '<option value="">All Locations</option>';
     const locations = [...new Set(products.map(p => p.location))];
     locations.forEach(location => {
@@ -97,16 +40,16 @@ function displayProducts(productsToDisplay) {
         const productCard = document.createElement('div');
         productCard.className = 'product-card';
         productCard.innerHTML = `
-            <div class="product-image" style="background-image: url('${product.image}')"></div>
+            <div class="product-image" style="background-image: url('${product.image || 'https://via.placeholder.com/300x200?text=Product'}')"></div>
             <div class="product-info">
                 <h3>${product.name}</h3>
                 <div class="product-price">₹${product.price.toFixed(2)} / ${product.unit}</div>
                 <div class="product-farmer">From: ${product.farmerName}, ${product.location}</div>
                 <div class="product-minorder">Min Order: ${product.minOrder} ${product.unit}</div>
-                <p>${product.description}</p>
+                <p>${product.description || ''}</p>
                 <div class="product-actions">
-                    <button class="btn view-details" data-id="${product.id}">View Details</button>
-                    <button class="btn add-to-cart" data-id="${product.id}">Add to Cart</button>
+                    <button class="btn btn-outline view-details" data-id="${product.id}">View Details</button>
+                    <button class="btn btn-primary add-to-cart" data-id="${product.id}">Add to Cart</button>
                 </div>
             </div>
         `;
@@ -115,6 +58,7 @@ function displayProducts(productsToDisplay) {
 
     productsContainer.appendChild(productGrid);
 
+    // Add event listeners
     document.querySelectorAll('.view-details').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const productId = e.target.getAttribute('data-id');
@@ -132,6 +76,7 @@ function displayProducts(productsToDisplay) {
 
 // Show product details in modal
 function showProductDetails(productId) {
+    const products = JSON.parse(localStorage.getItem('products')) || [];
     const product = products.find(p => p.id === productId);
     if (!product) return;
 
@@ -140,19 +85,19 @@ function showProductDetails(productId) {
 
     productDetail.innerHTML = `
         <div class="product-detail">
-            <div class="product-detail-image" style="background-image: url('${product.image}')"></div>
+            <div class="product-detail-image" style="background-image: url('${product.image || 'https://via.placeholder.com/300x200?text=Product'}')"></div>
             <div class="product-detail-info">
                 <h2>${product.name}</h2>
                 <div class="product-price">₹${product.price.toFixed(2)} / ${product.unit}</div>
                 <div class="product-farmer">From: ${product.farmerName}, ${product.location}</div>
                 <div class="product-minorder">Min Order: ${product.minOrder} ${product.unit}</div>
-                <p>${product.description}</p>
+                <p>${product.description || ''}</p>
                 <div class="product-quantity">
                     <label for="detailQuantity">Quantity:</label>
                     <input type="number" id="detailQuantity" min="${product.minOrder}" max="${product.quantity}" value="${product.minOrder}">
                     <span>${product.unit}</span>
                 </div>
-                <button class="btn add-to-cart-detail" data-id="${product.id}">Add to Cart</button>
+                <button class="btn btn-primary add-to-cart-detail" data-id="${product.id}">Add to Cart</button>
             </div>
         </div>
     `;
@@ -176,6 +121,7 @@ function showProductDetails(productId) {
 
 // Add product to cart
 function addToCart(productId, quantity = 1) {
+    const products = JSON.parse(localStorage.getItem('products')) || [];
     const product = products.find(p => p.id === productId);
     if (!product) return;
 
@@ -203,13 +149,13 @@ function addToCart(productId, quantity = 1) {
     }
 
     localStorage.setItem('cart', JSON.stringify(cart));
-    if (typeof updateCartCount === 'function') updateCartCount();
-
+    updateCartCount();
     alert(`${quantity} ${product.unit} of ${product.name} added to cart!`);
 }
 
 // Filter products
 function filterProducts() {
+    const products = JSON.parse(localStorage.getItem('products')) || [];
     const searchTerm = searchInput.value.toLowerCase();
     const category = categoryFilter.value;
     const location = locationFilter.value;
@@ -219,7 +165,7 @@ function filterProducts() {
     if (searchTerm) {
         filteredProducts = filteredProducts.filter(product =>
             product.name.toLowerCase().includes(searchTerm) ||
-            product.description.toLowerCase().includes(searchTerm) ||
+            (product.description && product.description.toLowerCase().includes(searchTerm)) ||
             product.farmerName.toLowerCase().includes(searchTerm)
         );
     }
@@ -237,8 +183,7 @@ function filterProducts() {
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', () => {
-    initLocationFilter();
-    displayProducts(products);
+    loadProducts();
 
     if (applyFilters) {
         applyFilters.addEventListener('click', filterProducts);
@@ -253,3 +198,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Update cart count
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartCount = document.getElementById('cartCount');
+    if (cartCount) {
+        cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
+    }
+}

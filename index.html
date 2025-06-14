@@ -94,7 +94,7 @@
                     </button>
                 </div>
                 <div class="divider">OR</div>
-                <form id="loginForm">
+                <form id="loginFormElement">
                     <input type="hidden" id="userRole" value="">
                     <div class="form-group">
                         <label for="loginEmail">Email</label>
@@ -106,11 +106,12 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Login</button>
                 </form>
+                <p class="auth-switch">Don't have an account? <a href="#" id="showRegister">Register</a></p>
             </div>
             
             <div id="registerForm" class="auth-form" style="display: none;">
                 <h3>Create New Account</h3>
-                <form id="registerForm">
+                <form id="registerFormElement">
                     <input type="hidden" id="regRole" value="">
                     <div class="form-row">
                         <div class="form-group">
@@ -138,7 +139,7 @@
                     </div>
                     <div class="form-group">
                         <label for="regAddress">Address</label>
-                        <textarea id="regAddress" rows="3" required></textarea>
+                            <textarea id="regAddress" rows="3" required></textarea>
                     </div>
                     <div id="farmerFields" style="display: none;">
                         <div class="form-group">
@@ -152,6 +153,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Register</button>
                 </form>
+                <p class="auth-switch">Already have an account? <a href="#" id="showLogin">Login</a></p>
             </div>
         </div>
     </div>
