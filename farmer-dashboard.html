@@ -217,6 +217,10 @@
                         <input type="number" id="productQuantity" min="1" required>
                     </div>
                     <div class="form-group">
+                        <label for="productMinOrder">Minimum Order*</label>
+                        <input type="number" id="productMinOrder" min="1" value="1" required>
+                    </div>
+                    <div class="form-group">
                         <label for="productUnit">Unit*</label>
                         <select id="productUnit" required>
                             <option value="kg">kg</option>
@@ -224,6 +228,14 @@
                             <option value="piece">piece</option>
                             <option value="dozen">dozen</option>
                         </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productImage">Product Image</label>
+                    <input type="file" id="productImage" accept="image/*">
+                    <div class="image-preview" id="imagePreview">
+                        <img id="previewImage" src="" alt="Preview" style="display: none;">
                     </div>
                 </div>
                 
@@ -239,8 +251,8 @@
             </form>
         </div>
     </div>
-    <!-- <script src="auth.js"></script>
-    <script src="main.js"></script> -->
+    <script src="auth.js"></script>
+    <script src="main.js"></script>
     <script src="farmer-dashboard.js"></script>
     </body>
     </html>

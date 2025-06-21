@@ -20,6 +20,20 @@ function initDashboard() {
     
     displayFarmInfo(user);
     displayFarmerProducts(user.id);
+    
+    // Setup image upload preview
+    document.getElementById('productImage').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const previewImage = document.getElementById('previewImage');
+                previewImage.src = event.target.result;
+                previewImage.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 }
 
 // Display farm information
@@ -48,9 +62,11 @@ function displayFarmerProducts(farmerId) {
         const productCard = document.createElement('div');
         productCard.className = 'farmer-product-card';
         productCard.innerHTML = `
+            <div class="product-image" style="background-image: url('${product.image || 'https://via.placeholder.com/300x200?text=Product'}')"></div>
             <h3>${product.name}</h3>
             <p><strong>Category:</strong> ${product.category}</p>
             <p><strong>Price:</strong> ₹${product.price.toFixed(2)} per ${product.unit}</p>
+            <p><strong>Min Order:</strong> ${product.minOrder || 1} ${product.unit}</p>
             <p><strong>Available:</strong> ${product.quantity} ${product.unit}</p>
             <p><strong>Description:</strong> ${product.description || 'None'}</p>
             <div class="farmer-product-actions">
@@ -81,6 +97,8 @@ function displayFarmerProducts(farmerId) {
 addProductBtn.addEventListener('click', () => {
     productFormTitle.textContent = 'Add New Product';
     document.getElementById('productId').value = '';
+    document.getElementById('previewImage').style.display = 'none';
+    document.getElementById('productImage').value = '';
     productForm.reset();
     productFormModal.style.display = 'block';
 });
@@ -98,8 +116,17 @@ function editProduct(productId) {
     document.getElementById('productCategory').value = product.category;
     document.getElementById('productPrice').value = product.price;
     document.getElementById('productQuantity').value = product.quantity;
+    document.getElementById('productMinOrder').value = product.minOrder || 1;
     document.getElementById('productUnit').value = product.unit;
     document.getElementById('productDescription').value = product.description || '';
+    
+    const previewImage = document.getElementById('previewImage');
+    if (product.image) {
+        previewImage.src = product.image;
+        previewImage.style.display = 'block';
+    } else {
+        previewImage.style.display = 'none';
+    }
     
     productFormModal.style.display = 'block';
 }
@@ -124,33 +151,54 @@ productForm.addEventListener('submit', (e) => {
     const productId = document.getElementById('productId').value;
     const isEdit = !!productId;
     
-    const productData = {
-        id: isEdit ? productId : 'product_' + Date.now(),
-        name: document.getElementById('productName').value,
-        category: document.getElementById('productCategory').value,
-        price: parseFloat(document.getElementById('productPrice').value),
-        quantity: parseInt(document.getElementById('productQuantity').value),
-        unit: document.getElementById('productUnit').value,
-        description: document.getElementById('productDescription').value || '',
-        farmerId: user.id,
-        farmerName: user.farmName || user.name,
-        location: user.location || 'Unknown',
-        image: 'https://via.placeholder.com/300x200?text=Product',
-        minOrder: 1, // Default minimum order
-        createdAt: new Date().toISOString()
-    };
-    
-    if (isEdit) {
-        // Update existing product
-        products = products.map(p => p.id === productId ? productData : p);
+    // Get image data
+    const imageInput = document.getElementById('productImage');
+    let imageUrl = 'https://via.placeholder.com/300x200?text=Product';
+    if (imageInput.files && imageInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imageUrl = e.target.result;
+            saveProduct();
+        };
+        reader.readAsDataURL(imageInput.files[0]);
+    } else if (isEdit) {
+        // Keep existing image if no new image was uploaded
+        const existingProduct = products.find(p => p.id === productId);
+        imageUrl = existingProduct?.image || imageUrl;
+        saveProduct();
     } else {
-        // Add new product
-        products.push(productData);
+        saveProduct();
     }
     
-    localStorage.setItem('products', JSON.stringify(products));
-    productFormModal.style.display = 'none';
-    displayFarmerProducts(user.id);
+    function saveProduct() {
+        const productData = {
+            id: isEdit ? productId : 'product_' + Date.now(),
+            name: document.getElementById('productName').value,
+            category: document.getElementById('productCategory').value,
+            price: parseFloat(document.getElementById('productPrice').value),
+            quantity: parseInt(document.getElementById('productQuantity').value),
+            minOrder: parseInt(document.getElementById('productMinOrder').value) || 1,
+            unit: document.getElementById('productUnit').value,
+            description: document.getElementById('productDescription').value || '',
+            farmerId: user.id,
+            farmerName: user.farmName || user.name,
+            location: user.location || 'Unknown',
+            image: imageUrl,
+            createdAt: isEdit ? products.find(p => p.id === productId).createdAt : new Date().toISOString()
+        };
+        
+        if (isEdit) {
+            // Update existing product
+            products = products.map(p => p.id === productId ? productData : p);
+        } else {
+            // Add new product
+            products.push(productData);
+        }
+        
+        localStorage.setItem('products', JSON.stringify(products));
+        productFormModal.style.display = 'none';
+        displayFarmerProducts(user.id);
+    }
 });
 
 // Edit farm info
