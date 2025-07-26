@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Dashboard - Farmers Market</title>
+    <link rel="stylesheet" href="farmer-dashboard.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">Farmers Market</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="farmer-dashboard.html" class="active">Dashboard</a></li>
+                    <li><a href="#" id="logoutBtn">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="dashboard-header">
+            <h2>Farmer Dashboard</h2>
+            <p>Manage your products and orders</p>
+        </div>
+
+        <section class="farmer-info">
+            <div class="section-header">
+                <h3>Your Farm Information</h3>
+                <button id="editFarmInfo" class="btn btn-outline">Edit Information</button>
+            </div>
+            <div id="farmInfo" class="info-card">
+                <!-- Farm info will be loaded here -->
+            </div>
+        </section>
+
+        <section class="products-management">
+            <div class="section-header">
+                <h3>Your Products</h3>
+                <button id="addProductBtn" class="btn btn-primary">Add Product</button>
+            </div>
+            <div id="farmerProducts" class="products-grid">
+                <!-- Farmer's products will be listed here -->
+            </div>
+        </section>
+
+        <section class="orders">
+            <div class="section-header">
+                <h3>Recent Orders</h3>
+            </div>
+            <div id="farmerOrders" class="info-card">
+                <p>No orders yet. Your orders will appear here when customers purchase your products.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="productFormModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="productFormTitle">Add New Product</h3>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productName">Product Name*</label>
+                        <input type="text" id="productName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productCategory">Category*</label>
+                        <select id="productCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="vegetables">Vegetables</option>
+                            <option value="fruits">Fruits</option>
+                            <option value="grains">Grains</option>
+                            <option value="dairy">Dairy</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productPrice">Price (₹)*</label>
+                        <input type="number" id="productPrice" min="1" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productQuantity">Quantity Available*</label>
+                        <input type="number" id="productQuantity" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productMinOrder">Minimum Order*</label>
+                        <input type="number" id="productMinOrder" min="1" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productUnit">Unit*</label>
+                        <select id="productUnit" required>
+                            <option value="kg">kg</option>
+                            <option value="g">g</option>
+                            <option value="piece">piece</option>
+                            <option value="dozen">dozen</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="productImage">Product Image</label>
+                    <input type="file" id="productImage" accept="image/*">
+                    <div class="image-preview" id="imagePreview">
+                        <img id="previewImage" src="" alt="Preview" style="display: none;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="productDescription">Description</label>
+                    <textarea id="productDescription" rows="4"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline cancel-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- <script src="auth.js"></script>
+    <script src="main.js"></script> -->
+    <script src="farmer-dashboard.js"></script>
+</body>
+
+</html>
