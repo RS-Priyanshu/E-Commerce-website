@@ -1,4 +1,3 @@
-// DOM Elements
 const farmInfo = document.getElementById('farmInfo');
 const editFarmInfoBtn = document.getElementById('editFarmInfo');
 const farmerProducts = document.getElementById('farmerProducts');

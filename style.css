@@ -171,7 +171,7 @@ nav ul li a:hover, nav ul li a.active {
 .hero-image {
     flex: 1;
     height: 400px;
-    background-image: url('https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+    background-image: url('C:/Users/Raj/Pictures/pic/image/photo-1606787366850-de6330128bfc.avif');
     background-size: cover;
     background-position: center;
     border-radius: var(--border-radius);
